@@ -185,3 +185,42 @@ function printNumbers2(from, to) {
     currentNum++;
   }, 1000);
 }
+
+/*
+Создайте декоратор spy(func), который должен возвращать обёртку, которая сохраняет все вызовы функции в своём свойстве calls.
+
+Каждый вызов должен сохраняться как массив аргументов.
+*/
+
+function spy(func) {
+  function wrapper(...args) {
+    wrapper.calls.push(args);
+    return func.apply(this, args);
+  }
+
+  wrapper.calls = [];
+
+  return wrapper;
+}
+
+// Создайте декоратор delay(f, ms), который задерживает каждый вызов f на ms миллисекунд.
+function delay(f, ms) {
+  return function () {
+    setTimeout(() => f.apply(this, arguments), ms);
+  };
+}
+
+/*
+Результат декоратора debounce(f, ms) – это обёртка, которая откладывает вызовы f, 
+пока не пройдёт ms миллисекунд бездействия (без вызовов, «cooldown period»), 
+а затем вызывает f один раз с последними аргументами.
+*/
+
+function debounce(f, ms) {
+  let timeout;
+
+  return function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => f.apply(this, arguments), ms);
+  };
+}
